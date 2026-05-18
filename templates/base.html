@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FraudShield — Real-Time Payment Fraud Detector</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</head>
+<body>
+  <nav class="sidebar">
+    <div class="brand">
+      <span class="shield">🛡</span>
+      <div>
+        <div class="brand-name">FraudShield</div>
+        <div class="brand-sub">ICT503 · AU Payments</div>
+      </div>
+    </div>
+    <ul class="nav-links">
+      <li><a href="/" class="{{ 'active' if request.endpoint == 'dashboard' }}">
+        <span>📊</span> Dashboard
+      </a></li>
+      <li><a href="/transactions" class="{{ 'active' if request.endpoint == 'transactions' }}">
+        <span>📋</span> Transactions
+      </a></li>
+      <li><a href="/alerts" class="{{ 'active' if request.endpoint == 'alerts' }}">
+        <span>🚨</span> Alerts
+      </a></li>
+    </ul>
+    <div class="nav-footer">
+      <a href="/regenerate" class="btn-regen" onclick="return confirm('Regenerate all data?')">↺ New Dataset</a>
+      <div class="team">Rumman · Zahidul · Kazi · Dewan</div>
+    </div>
+  </nav>
+
+  <main class="content">
+    <header class="topbar">
+      <h1>{% block title %}Dashboard{% endblock %}</h1>
+      <div class="topbar-right">
+        <span class="badge-live">● LIVE</span>
+        <span class="time" id="clock"></span>
+      </div>
+    </header>
+    {% block content %}{% endblock %}
+  </main>
+
+  <script>
+    // Live clock
+    function tick() {
+      const now = new Date();
+      document.getElementById("clock").textContent = now.toLocaleTimeString("en-AU");
+    }
+    tick(); setInterval(tick, 1000);
+  </script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

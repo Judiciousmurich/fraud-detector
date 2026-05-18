@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}All Transactions{% endblock %}
+{% block content %}
+
+<div class="filter-bar">
+  <form method="get" class="filter-form">
+    <input name="search" value="{{ search }}" placeholder="Search ID, account, merchant…" class="search-input"/>
+    <select name="risk" class="filter-select" onchange="this.form.submit()">
+      <option value="ALL" {{ 'selected' if filter_level == 'ALL' }}>All Risk Levels</option>
+      <option value="HIGH" {{ 'selected' if filter_level == 'HIGH' }}>HIGH</option>
+      <option value="MEDIUM" {{ 'selected' if filter_level == 'MEDIUM' }}>MEDIUM</option>
+      <option value="LOW" {{ 'selected' if filter_level == 'LOW' }}>LOW</option>
+    </select>
+    <button type="submit" class="btn-primary">Filter</button>
+  </form>
+  <span class="result-count">{{ rows|length }} transactions</span>
+</div>
+
+<div class="section-card">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>ID</th><th>Timestamp</th><th>Account</th>
+        <th>Merchant</th><th>Category</th><th>Amount</th>
+        <th>Location</th><th>Risk Score</th><th>Level</th><th>Flagged</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in rows %}
+      <tr class="{{ 'flagged-row' if row.flagged }}">
+        <td class="mono">{{ row.transaction_id }}</td>
+        <td class="mono small">{{ row.timestamp }}</td>
+        <td class="mono">{{ row.account_id }}</td>
+        <td>{{ row.merchant }}</td>
+        <td><span class="cat-badge">{{ row.category }}</span></td>
+        <td class="amount">${{ "%.2f"|format(row.amount) }}</td>
+        <td>{{ row.location }}</td>
+        <td>
+          <div class="score-wrap">
+            <div class="score-bar {{ 'bar-high' if row.risk_level == 'HIGH' else ('bar-med' if row.risk_level == 'MEDIUM' else 'bar-low') }}" style="width:{{ row.risk_score }}%"></div>
+            <span>{{ row.risk_score }}</span>
+          </div>
+        </td>
+        <td><span class="badge {{ row.risk_level|lower }}">{{ row.risk_level }}</span></td>
+        <td>{% if row.flagged %}🚨{% else %}—{% endif %}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

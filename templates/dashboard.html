@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — FraudShield{% endblock %}
+{% block content %}
+
+<div class="au-banner">
+  🇦🇺 Australian payment transactions only — {{ stats.au_cities }} cities ·
+  {{ stats.cleaned_from }} raw → {{ stats.total }} cleaned
+  {% if stats.removed_non_au %} ({{ stats.removed_non_au }} non-AU removed){% endif %}
+  · Alert threshold: {{ stats.risk_threshold }}/100
+</div>
+
+<!-- Stat Cards -->
+<div class="stat-grid">
+  <div class="stat-card">
+    <div class="stat-icon blue">📦</div>
+    <div class="stat-body">
+      <div class="stat-value">{{ stats.total }}</div>
+      <div class="stat-label">Total Transactions</div>
+      <div class="stat-sub">Value: ${{ stats.total_value }}</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon red">🚨</div>
+    <div class="stat-body">
+      <div class="stat-value">{{ stats.flagged }}</div>
+      <div class="stat-label">Flagged Transactions</div>
+      <div class="stat-sub">Value at risk: ${{ stats.flagged_value }}</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon orange">⚠️</div>
+    <div class="stat-body">
+      <div class="stat-value">{{ stats.pending }}</div>
+      <div class="stat-label">Pending Review</div>
+      <div class="stat-sub">Requires admin action</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon green">✅</div>
+    <div class="stat-body">
+      <div class="stat-value">{{ stats.cleared }}</div>
+      <div class="stat-label">Cleared</div>
+      <div class="stat-sub">{{ stats.confirmed }} confirmed fraud</div>
+    </div>
+  </div>
+</div>
+
+<!-- Charts Row -->
+<div class="charts-row">
+  <div class="chart-card">
+    <h3>Risk Level Distribution</h3>
+    <canvas id="riskChart" height="220"></canvas>
+  </div>
+  <div class="chart-card">
+    <h3>Fraud Flags by Category</h3>
+    <canvas id="catChart" height="220"></canvas>
+  </div>
+  <div class="chart-card risk-summary">
+    <h3>Risk Breakdown</h3>
+    <div class="risk-bars">
+      <div class="risk-row">
+        <span class="badge high">HIGH</span>
+        <div class="bar-wrap"><div class="bar bar-high" style="width:{{ (stats.high / stats.total * 100)|round(1) }}%"></div></div>
+        <span class="risk-num">{{ stats.high }}</span>
+      </div>
+      <div class="risk-row">
+        <span class="badge medium">MED</span>
+        <div class="bar-wrap"><div class="bar bar-med" style="width:{{ (stats.medium / stats.total * 100)|round(1) }}%"></div></div>
+        <span class="risk-num">{{ stats.medium }}</span>
+      </div>
+      <div class="risk-row">
+        <span class="badge low">LOW</span>
+        <div class="bar-wrap"><div class="bar bar-low" style="width:{{ (stats.low / stats.total * 100)|round(1) }}%"></div></div>
+        <span class="risk-num">{{ stats.low }}</span>
+      </div>
+    </div>
+    <div class="flag-rate">
+      Detection rate: <strong>{{ ((stats.flagged / stats.total) * 100)|round(1) }}%</strong>
+    </div>
+  </div>
+</div>
+
+<!-- Recent Alerts Table -->
+<div class="section-card">
+  <div class="section-header">
+    <h3>🚨 Top Flagged Transactions</h3>
+    <a href="/alerts" class="btn-link">View All →</a>
+  </div>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>ID</th><th>Account</th><th>Merchant</th>
+        <th>Amount</th><th>Location</th><th>Risk Score</th>
+        <th>Risk Level</th><th>Reason</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in recent_alerts %}
+      <tr>
+        <td class="mono">{{ row.transaction_id }}</td>
+        <td class="mono">{{ row.account_id }}</td>
+        <td>{{ row.merchant }}</td>
+        <td class="amount">${{ "%.2f"|format(row.amount) }}</td>
+        <td>{{ row.location }}</td>
+        <td>
+          <div class="score-wrap">
+            <div class="score-bar" style="width:{{ row.risk_score }}%"></div>
+            <span>{{ row.risk_score }}</span>
+          </div>
+        </td>
+        <td><span class="badge {{ row.risk_level|lower }}">{{ row.risk_level }}</span></td>
+        <td class="reason-cell">{{ row.risk_reasons }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+const riskCtx = document.getElementById("riskChart").getContext("2d");
+new Chart(riskCtx, {
+  type: "doughnut",
+  data: {
+    labels: ["HIGH", "MEDIUM", "LOW"],
+    datasets: [{
+      data: [{{ risk_high }}, {{ risk_med }}, {{ risk_low }}],
+      backgroundColor: ["#ef4444","#f97316","#22c55e"],
+      borderWidth: 2, borderColor: "#1e293b"
+    }]
+  },
+  options: { plugins: { legend: { labels: { color: "#cbd5e1" } } } }
+});
+
+const catCtx = document.getElementById("catChart").getContext("2d");
+new Chart(catCtx, {
+  type: "bar",
+  data: {
+    labels: {{ chart_labels|safe }},
+    datasets: [{
+      label: "Flagged",
+      data: {{ chart_values|safe }},
+      backgroundColor: "#ef4444aa",
+      borderColor: "#ef4444",
+      borderWidth: 1
+    }]
+  },
+  options: {
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { ticks: { color: "#94a3b8" }, grid: { color: "#334155" } },
+      y: { ticks: { color: "#94a3b8" }, grid: { color: "#334155" } }
+    }
+  }
+});
+</script>
+{% endblock %}

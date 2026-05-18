@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Fraud Alerts{% endblock %}
+{% block content %}
+
+<div class="alert-summary">
+  <span>{{ rows|length }} flagged transactions (score ≥ {{ risk_threshold }})</span>
+  <span class="sep">·</span>
+  <span class="pending-count">{{ rows|selectattr('review_status','equalto','Pending')|list|length }} pending review</span>
+  <span class="sep">·</span>
+  <span class="au-badge">🇦🇺 Australia only</span>
+</div>
+
+<div class="alerts-grid">
+  {% for row in rows %}
+  <div class="alert-card {{ 'status-confirmed' if row.review_status == 'Confirmed Fraud' else ('status-cleared' if row.review_status == 'Cleared' else '') }}">
+    <div class="alert-header">
+      <div>
+        <span class="badge {{ row.risk_level|lower }}">{{ row.risk_level }}</span>
+        <span class="alert-score">Risk: {{ row.risk_score }}/100</span>
+      </div>
+      <span class="review-status-badge {{ row.review_status|lower|replace(' ','_') }}">{{ row.review_status }}</span>
+    </div>
+
+    <div class="alert-body">
+      <div class="alert-row"><span class="al">ID</span><span class="av mono">{{ row.transaction_id }}</span></div>
+      <div class="alert-row"><span class="al">Account</span><span class="av mono">{{ row.account_id }}</span></div>
+      <div class="alert-row"><span class="al">Merchant</span><span class="av">{{ row.merchant }}</span></div>
+      <div class="alert-row"><span class="al">Amount</span><span class="av amount">${{ "%.2f"|format(row.amount) }}</span></div>
+      <div class="alert-row"><span class="al">Location</span><span class="av">{{ row.location }}</span></div>
+      <div class="alert-row"><span class="al">Time</span><span class="av small">{{ row.timestamp }}</span></div>
+    </div>
+
+    <div class="alert-reasons">
+      <strong>⚠ Indicators:</strong> {{ row.risk_reasons }}
+    </div>
+
+    {% if row.log_history %}
+    <div class="log-history">
+      <strong>Log history</strong>
+      <ul>
+        {% for entry in row.log_history %}
+        <li>
+          <span class="log-time">{{ entry.timestamp }}</span>
+          <span class="log-event">{{ entry.event }}</span>
+          <span class="log-msg">{{ entry.message }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+
+    <form method="post" action="/review/{{ row.transaction_id }}" class="review-form">
+      <select name="status" class="review-select">
+        <option value="Pending" {{ 'selected' if row.review_status == 'Pending' }}>Pending</option>
+        <option value="Confirmed Fraud" {{ 'selected' if row.review_status == 'Confirmed Fraud' }}>Confirmed Fraud</option>
+        <option value="Cleared" {{ 'selected' if row.review_status == 'Cleared' }}>Cleared</option>
+        <option value="Under Investigation" {{ 'selected' if row.review_status == 'Under Investigation' }}>Under Investigation</option>
+      </select>
+      <button type="submit" class="btn-primary">Update</button>
+    </form>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

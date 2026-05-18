@@ -1,0 +1,106 @@
+[
+  {
+    "transaction_id": "TXN00110",
+    "timestamp": "2026-05-18 20:21:43",
+    "event": "ALERT_TRIGGERED",
+    "message": "Risk score 80/100 \u2014 High amount ($2,612.29); Unusual for account (4\u00d7 typical $130); High-risk merchant (Unknown Merchant)",
+    "risk_score": 80,
+    "risk_level": "HIGH"
+  },
+  {
+    "transaction_id": "TXN00022",
+    "timestamp": "2026-05-18 20:21:43",
+    "event": "ALERT_TRIGGERED",
+    "message": "Risk score 65/100 \u2014 Elevated amount ($1,125.48); Unusual hour (01:xx AEST); High-risk merchant (International Wire)",
+    "risk_score": 65,
+    "risk_level": "HIGH"
+  },
+  {
+    "transaction_id": "TXN00032",
+    "timestamp": "2026-05-18 20:21:43",
+    "event": "ALERT_TRIGGERED",
+    "message": "Risk score 65/100 \u2014 High amount ($3,865.89); High-risk merchant (Casino Online)",
+    "risk_score": 65,
+    "risk_level": "HIGH"
+  },
+  {
+    "transaction_id": "TXN00088",
+    "timestamp": "2026-05-18 20:21:43",
+    "event": "ALERT_TRIGGERED",
+    "message": "Risk score 65/100 \u2014 High amount ($2,592.65); High-risk merchant (Crypto Exchange)",
+    "risk_score": 65,
+    "risk_level": "HIGH"
+  },
+  {
+    "transaction_id": "TXN00077",
+    "timestamp": "2026-05-18 20:21:43",
+    "event": "ALERT_TRIGGERED",
+    "message": "Risk score 75/100 \u2014 High amount ($7,978.41); Unusual for account (4\u00d7 typical $497); Unusual hour (01:xx AEST)",
+    "risk_score": 75,
+    "risk_level": "HIGH"
+  },
+  {
+    "transaction_id": "TXN00125",
+    "timestamp": "2026-05-18 20:21:43",
+    "event": "ALERT_TRIGGERED",
+    "message": "Risk score 80/100 \u2014 High amount ($3,933.99); Unusual for account (4\u00d7 typical $808); High-risk merchant (Casino Online)",
+    "risk_score": 80,
+    "risk_level": "HIGH"
+  },
+  {
+    "transaction_id": "TXN00135",
+    "timestamp": "2026-05-18 20:21:43",
+    "event": "ALERT_TRIGGERED",
+    "message": "Risk score 60/100 \u2014 Elevated amount ($2,369.71); Unusual for account (4\u00d7 typical $544); High-risk merchant (Unknown Merchant)",
+    "risk_score": 60,
+    "risk_level": "HIGH"
+  },
+  {
+    "transaction_id": "TXN00011",
+    "timestamp": "2026-05-18 20:21:43",
+    "event": "ALERT_TRIGGERED",
+    "message": "Risk score 65/100 \u2014 High amount ($2,881.01); High-risk merchant (International Wire)",
+    "risk_score": 65,
+    "risk_level": "HIGH"
+  },
+  {
+    "transaction_id": "TXN00180",
+    "timestamp": "2026-05-18 20:21:43",
+    "event": "ALERT_TRIGGERED",
+    "message": "Risk score 65/100 \u2014 High amount ($3,855.49); High-risk merchant (Casino Online)",
+    "risk_score": 65,
+    "risk_level": "HIGH"
+  },
+  {
+    "transaction_id": "TXN00111",
+    "timestamp": "2026-05-18 20:21:43",
+    "event": "ALERT_TRIGGERED",
+    "message": "Risk score 75/100 \u2014 High amount ($12,865.39); Unusual for account (4\u00d7 typical $213); Unusual hour (01:xx AEST)",
+    "risk_score": 75,
+    "risk_level": "HIGH"
+  },
+  {
+    "transaction_id": "TXN00143",
+    "timestamp": "2026-05-18 20:21:43",
+    "event": "ALERT_TRIGGERED",
+    "message": "Risk score 100/100 \u2014 High amount ($4,413.65); Unusual for account (4\u00d7 typical $258); Unusual hour (04:xx AEST); High-risk merchant (Unknown Merchant)",
+    "risk_score": 100,
+    "risk_level": "HIGH"
+  },
+  {
+    "transaction_id": "TXN00163",
+    "timestamp": "2026-05-18 20:21:43",
+    "event": "ALERT_TRIGGERED",
+    "message": "Risk score 80/100 \u2014 Elevated amount ($1,694.85); Unusual for account (4\u00d7 typical $54); Unusual hour (03:xx AEST); High-risk merchant (Unknown Merchant)",
+    "risk_score": 80,
+    "risk_level": "HIGH"
+  },
+  {
+    "transaction_id": "TXN00019",
+    "timestamp": "2026-05-18 20:21:43",
+    "event": "ALERT_TRIGGERED",
+    "message": "Risk score 65/100 \u2014 Elevated amount ($1,868.49); Cross-state activity (Gold Coast, QLD); Suspicious category (Transfer)",
+    "risk_score": 65,
+    "risk_level": "HIGH"
+  }
+]
