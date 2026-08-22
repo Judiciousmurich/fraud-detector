@@ -1,11 +1,4 @@
-# FraudShield — Real-Time Payment Fraud Detector
-
-**ICT503 Applied IT Project B · Group Assessment 3**
-
-**Team:** Rumman Zaman (202471203) · Md. Zahidul Islam (202471200) · Kazi Maruf Ahmed (202471206) · Dewan Sariful Islam (202470995)
-
----
-
+# FraudShield 
 ## Overview
 
 FraudShield is a prototype fraud detection system for **Australian payment transactions**. It follows a four-step workflow:
